@@ -32,6 +32,9 @@ namespace Infochy\InfochyCat\Domain\Repository;
  */
 class CatRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
-
-    
+    public function setRespectStoragePageFalse() {
+        $querySettings = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Typo3QuerySettings');
+        $querySettings->setRespectStoragePage(FALSE);
+        $this->setDefaultQuerySettings($querySettings);
+    }
 }

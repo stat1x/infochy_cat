@@ -32,7 +32,13 @@ namespace Infochy\InfochyCat\Controller;
  */
 class CatController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
-
+    /**
+     * catRepository
+     *
+     * @var \Infochy\InfochyCat\Domain\Repository\CategoryRepository
+     * @inject
+     */
+    protected $categoryRepository = NULL;
     /**
      * catRepository
      *
@@ -48,8 +54,16 @@ class CatController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      */
     public function listAction()
     {
-        $cats = $this->catRepository->findAll();
-        $this->view->assign('cats', $cats);
+        $categoryRootUid = 0;
+        $this->categoryRepository->setRespectStoragePageFalse();
+        $categoryTreeArray = $this->categoryRepository->getCategoryTreeArray($categoryRootUid);
+        $this->view->assign('categoryTreeArray', $categoryTreeArray);
+
+
+        $this->catRepository->setRespectStoragePageFalse();
+        $categories = $this->catRepository->findAll();
+        $this->view->assign('categories', $categories);
+
     }
     
     /**
@@ -62,66 +76,6 @@ class CatController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     {
         $this->view->assign('cat', $cat);
     }
-    
-    /**
-     * action new
-     *
-     * @return void
-     */
-    public function newAction()
-    {
-        
-    }
-    
-    /**
-     * action create
-     *
-     * @param \Infochy\InfochyCat\Domain\Model\Cat $newCat
-     * @return void
-     */
-    public function createAction(\Infochy\InfochyCat\Domain\Model\Cat $newCat)
-    {
-        $this->addFlashMessage('The object was created. Please be aware that this action is publicly accessible unless you implement an access check. See http://wiki.typo3.org/T3Doc/Extension_Builder/Using_the_Extension_Builder#1._Model_the_domain', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
-        $this->catRepository->add($newCat);
-        $this->redirect('list');
-    }
-    
-    /**
-     * action edit
-     *
-     * @param \Infochy\InfochyCat\Domain\Model\Cat $cat
-     * @ignorevalidation $cat
-     * @return void
-     */
-    public function editAction(\Infochy\InfochyCat\Domain\Model\Cat $cat)
-    {
-        $this->view->assign('cat', $cat);
-    }
-    
-    /**
-     * action update
-     *
-     * @param \Infochy\InfochyCat\Domain\Model\Cat $cat
-     * @return void
-     */
-    public function updateAction(\Infochy\InfochyCat\Domain\Model\Cat $cat)
-    {
-        $this->addFlashMessage('The object was updated. Please be aware that this action is publicly accessible unless you implement an access check. See http://wiki.typo3.org/T3Doc/Extension_Builder/Using_the_Extension_Builder#1._Model_the_domain', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
-        $this->catRepository->update($cat);
-        $this->redirect('list');
-    }
-    
-    /**
-     * action delete
-     *
-     * @param \Infochy\InfochyCat\Domain\Model\Cat $cat
-     * @return void
-     */
-    public function deleteAction(\Infochy\InfochyCat\Domain\Model\Cat $cat)
-    {
-        $this->addFlashMessage('The object was deleted. Please be aware that this action is publicly accessible unless you implement an access check. See http://wiki.typo3.org/T3Doc/Extension_Builder/Using_the_Extension_Builder#1._Model_the_domain', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
-        $this->catRepository->remove($cat);
-        $this->redirect('list');
-    }
+
 
 }

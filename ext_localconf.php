@@ -7,12 +7,12 @@ if (!defined('TYPO3_MODE')) {
 	'Infochy.' . $_EXTKEY,
 	'Plugin',
 	array(
-		'Cat' => 'list, show, new, create, edit, update, delete',
+		'Cat' => 'list, show',
 		
 	),
 	// non-cacheable actions
 	array(
-		'Cat' => 'create, update, delete',
+		'Cat' => 'list, show',
 		
 	)
 );
